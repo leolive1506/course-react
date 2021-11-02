@@ -1,11 +1,12 @@
-# Oq React
+# 1. Configuração ambiente
+## Oq React
 * Biblioteca p criação de interface
     * Web, moblie, tv, realidade virtual
 * Single page aplication
     * Apenas o front com backend separado (API)
 * Atualiza somente conteudo que sofreu alteração
 
-# Criando estrutura
+## Criando estrutura
 ```
 yarn add react
 yarn add react-dom
@@ -14,7 +15,7 @@ yarn add react-dom
 * React-dom
     * Faz com que react se comunique com html
 
-# Babel
+## Babel
 * Converte código para browser entenderem
 ```
 yarn add @babel/core @babel/cli @babel/preset-env -D
@@ -45,7 +46,7 @@ yarn add @babel/core @babel/cli @babel/preset-env -D
     }
     ```
 
-# Webpack
+## Webpack
 * Inseri config de como tratar cada tipo arquivo e converte em arquivo que o browser entende
     * Ex: Inserir estilo no código
         ```ts
@@ -62,24 +63,26 @@ yarn add @babel/core @babel/cli @babel/preset-env -D
     const path = require("path")
 
     module.exports = {
-        entry: path.resolve(__dirname, "src", "index.jsx"), //arquivo inicial da aplicação
+        entry: path.resolve(__dirname, 'src', 'index.jsx'), //arquivo inicial da aplicação
         output: { //arquivo que vai gerar com webpack
             path: path.resolve(__dirname, "dist"),
             filename: "bundle.js"
         },
 
         resolve: {
-            extensions: ['.js', 'jsx'] //extensões de arquivos que vai ler
+            extensions: ['.js', '.jsx']  //extensões de arquivos que vai ler
         },
+          
 
         module: { // como vai se comportar quando estiver importanto diversos tipo de arquivos
             rules: [ //array de regras
                 // definir um obj pra cada tipo de arquivo
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,  // excluir todos file dentro node_modules que ja são arquivos pronto p browser ler ja que isso é responsabilidade da biblioteca 
-                    use: "babel-loader"
+               {
+                    test: /\.jsx$/,
+                    exclude: /node_modules/, // excluir todos file dentro node_modules que ja são arquivos pronto p browser ler ja que isso é responsabilidade da biblioteca 
+                    use: 'babel-loader'
                 }
+                    
             ]
         }
     }
@@ -90,7 +93,7 @@ yarn add @babel/core @babel/cli @babel/preset-env -D
         yarn webpack
         ```
 
-# Estrutura ReactJS
+## Estrutura ReactJS
     ```jsx
     import { render } from "react-dom"
 
@@ -98,7 +101,7 @@ yarn add @babel/core @babel/cli @babel/preset-env -D
     render(<h1>Test</h1>, document.getElementById("root"))
     ```
 
-# Servindo HTML estático
+## Servindo HTML estático
 * Existe um plugin webpack que injeta arquivo js no html pra não preocupar em ficar injetando arquivo no html
 ```
 yarn add html-webpack-plugin -D
@@ -114,7 +117,7 @@ yarn add html-webpack-plugin -D
     ],
     ```
 
-# Webpack Dev Server
+## Webpack Dev Server
 ```
 yarn add webpack-dev-server -D
 ```
@@ -131,7 +134,7 @@ yarn add webpack-dev-server -D
     yarn webpack serve
     ```
 
-# Source maps
+## Source maps
 * Forma conseguir visualizar código original app mesmo quando código está no bundle.js
     * Ex: Se não usar, consta a linha do bundle.js e não arquivo original
 * Existem souce map pra desenvolvimento e produção
@@ -140,7 +143,7 @@ yarn add webpack-dev-server -D
 devtool: "eval-source-map",
 ```
 
-## Ambiente dev e produção
+### Ambiente dev e produção
 * Cross-env -> definir variaveis ambientes independente sistema operacional
 ```
 yarn add cross-env -D
@@ -160,3 +163,23 @@ devtool: isDevelopment ? "eval-source-map" : "source-map",
     "build": "cross-env NODE_ENV=production webpack"
   },
 ```
+
+## Importando arquivo css
+```
+yarn add style-loader css-loader -D
+```
+
+* `Usando SASS`
+    ```
+    yarn add node-sass
+    yarn add sass-loader -D
+    ```
+
+    * Dentro de module: {rules []}
+    ```js
+    {   // regra p arquivos scss
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: ["style-loader", "css-loader", "sass-loader"]
+    }
+    ```
