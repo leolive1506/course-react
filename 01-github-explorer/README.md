@@ -38,7 +38,9 @@ yarn add @babel/core @babel/cli @babel/preset-env -D
     module.exports = {
         presets: [
             "@babel/preset-env",
-            "@babel/preset-react",
+            ["@babel/preset-react", {
+                runtime: "automatic" // pra não precisa import React from 'react' em todo arquivo
+            }]
         ]
     }
     ```
@@ -82,3 +84,79 @@ yarn add @babel/core @babel/cli @babel/preset-env -D
         }
     }
     ```
+
+    * Fazer Build com webpack
+        ```
+        yarn webpack
+        ```
+
+# Estrutura ReactJS
+    ```jsx
+    import { render } from "react-dom"
+
+    //render(oq vai exebir em tela, dentro qual elemento)
+    render(<h1>Test</h1>, document.getElementById("root"))
+    ```
+
+# Servindo HTML estático
+* Existe um plugin webpack que injeta arquivo js no html pra não preocupar em ficar injetando arquivo no html
+```
+yarn add html-webpack-plugin -D
+```
+* Add no webpack.config.js
+    ```js
+    const HtmlWebpackPlugin = require('html-webpack-plugin')
+    // dentro module.exports
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, 'public', 'index.html')
+        })
+    ],
+    ```
+
+# Webpack Dev Server
+```
+yarn add webpack-dev-server -D
+```
+* Automatizar o `yarn webpack` a cada vez que houver alterações
+* No webpack.congig.js, dentro module.exports
+    ```js
+    devServer: {
+        static: path.resolve(__dirname, "public")
+    },
+    ```
+
+* Para executar (abre em  [PORTA 8080](http://localhost:8080/))
+    ```
+    yarn webpack serve
+    ```
+
+# Source maps
+* Forma conseguir visualizar código original app mesmo quando código está no bundle.js
+    * Ex: Se não usar, consta a linha do bundle.js e não arquivo original
+* Existem souce map pra desenvolvimento e produção
+* Dentro webpack.config.js, dentro de module.exports
+``` js
+devtool: "eval-source-map",
+```
+
+## Ambiente dev e produção
+* Cross-env -> definir variaveis ambientes independente sistema operacional
+```
+yarn add cross-env -D
+```
+
+* NODE_ENV -> variavel ambiente verificando se é dev ou produção
+```js
+const isDevelopment = process.env.NODE_ENV
+mode: isDevelopment ? "development" : "production",
+devtool: isDevelopment ? "eval-source-map" : "source-map",
+```
+
+* package.json
+```json
+"scripts": {
+    "dev": "webpack serve",
+    "build": "cross-env NODE_ENV=production webpack"
+  },
+```
