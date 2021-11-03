@@ -2,11 +2,14 @@ import { RepositoryItem } from "./RepositoryItem";
 import '../styles/repositories.scss'
 import { useEffect, useState } from "react";
 
-//api.github.com/orgs/rocketseat/repos
-
+interface Repository {
+    name: string;
+    description: string;
+    html_url: string
+}
 
 export function RepositoryList() {
-    const [repositories, setRepositories] = useState([])
+    const [repositories, setRepositories] = useState<Repository[]>([])
     // como vai fazer chamada api, demora um pouco p retornar dados. Por isso armazenar no state, ja que quando a pag terminar de carregar não vai ter os dados em si, assim que carregar o component é atualizado
 
     useEffect(() => {
@@ -14,6 +17,8 @@ export function RepositoryList() {
             .then(res => res.json())
             .then(data => setRepositories(data))
     }, [])
+
+
     return (
         <section className="repository-list">
             <h1>Lista de repositórios</h1>

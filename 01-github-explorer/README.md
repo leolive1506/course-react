@@ -297,7 +297,7 @@ plugins: [
 * O filter Boolean remove tudo diferente de true
 
 
-## Estilização
+# 3. Estilização
 ```scss
 li {
     & + li {
@@ -348,3 +348,91 @@ Each child in a list should have a unique "key" prop.
 ```
 * Acontece toda vez que fazer map no HTML
     * Passar a key (informação única)
+
+
+# 4. Usando TypeScript 
+* TypeScript é um superset
+    * superset -> conjunto funcionalidade adicionada em cima de uma linguagem
+* Permite add tipagem, formato das informações
+* Antes de rodas produção converte em js
+
+```
+yarn add typescript -D
+yanr tsc --init
+```
+
+* Deixar
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [ // entende que ta falando com dom, html
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "jsx": "react-jsx",  // fala que ta usando jsx do react
+    "moduleResolution": "node",
+    "resolveJsonModule": true, // add possibilidade importar arquivos json
+    "allowJs": true, //fala que pode ter arquivo js e jsx
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "preserveSymlinks": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": [ // onde código aplicação vai ta
+    "src"
+  ]
+}
+```
+
+* Por padrão babel não consegue interpretar ts
+```
+yarn add @babel/preset-typescript -D
+```
+    * No babel.config.js
+```json
+"@babel/preset-typescript",
+```
+    * No webpack.config.js
+```js
+entry: path.resolve(__dirname, 'src', 'index.tsx'),
+// dentro de resolve, alterar para
+extensions: ['.js', '.jsx', ".ts", ".tsx"]
+
+// dentro de rules, alterar para
+test: /\.(j|t)sx$/, // ler jsx com babel-loader
+```
+
+* Algumas bibliotecas não incluem as definições de tipo do TS
+    * Quando não incluir, ele é criada pela comunidade ou mantido em um repositório a parte
+
+    * Ex:
+    ```
+    yarn add @types/react -D
+    yarn add @types/react-dom -D
+    ```
+
+* Quando tem um estado (principalmente vetor ou obj) ele não consegue definir tipo apenas pelo estado inicial
+
+* Criar uma interface
+* Existe funcionalidade type generic -> que o valor pode mudar 
+    * sintaxe
+    ```tsx
+    interface Repository {
+        name: string;
+        description: string;
+        html_url: string
+    }
+
+    export function RepositoryList() {
+    const [repositories, setRepositories] = useState<Repository[]>([])
+    ```
+
+# 5. Utilizando DevTools
+* É uma extensão navegador
+* Na aba desenvolvedor permite ver os componentes da aplicação
